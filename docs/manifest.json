@@ -1,0 +1,22 @@
+{
+  "name": "璧山好房",
+  "short_name": "璧山好房",
+  "description": "小平帮你找到理想的家 — 璧山独立房产经纪人",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F9FAFB",
+  "theme_color": "#16A085",
+  "icons": [
+    {
+      "src": "images/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "images/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -1,0 +1,288 @@
+/* 璧山好房 · 移动端样式（<768px） */
+
+/* === 移动端顶部导航 === */
+.mobile-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-md) var(--sp-lg);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  min-height: 48px;
+}
+.mobile-nav .back {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: var(--text-primary);
+  border-radius: var(--radius-sm);
+}
+.mobile-nav .title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.mobile-nav .action {
+  width: 36px;
+  height: 36px;
+}
+
+/* === 移动端底部导航 === */
+.mobile-tabs {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: var(--sp-sm) 0;
+  padding-bottom: max(var(--sp-sm), env(safe-area-inset-bottom));
+  position: sticky;
+  bottom: 0;
+  z-index: 100;
+}
+.mobile-tabs .tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--sp-xs) var(--sp-md);
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  transition: color 0.2s;
+}
+.mobile-tabs .tab.active {
+  color: var(--green-primary);
+}
+.mobile-tabs .tab .icon {
+  font-size: 1.3rem;
+}
+
+/* === 语音输入按钮（首页核心） === */
+.voice-btn {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: var(--green-primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 32px rgba(22,160,133,0.3);
+  transition: all 0.2s;
+  margin: 0 auto;
+  position: relative;
+}
+.voice-btn:active {
+  transform: scale(0.93);
+  box-shadow: 0 4px 16px rgba(22,160,133,0.4);
+}
+.voice-btn.listening {
+  background: var(--warm-accent);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+.voice-btn .mic-icon {
+  font-size: 3rem;
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 8px 32px rgba(230,126,34,0.3); }
+  50% { box-shadow: 0 8px 48px rgba(230,126,34,0.6); }
+}
+
+/* === AI 对话气泡 === */
+.chat-bubble {
+  max-width: 82%;
+  padding: var(--sp-md) var(--sp-lg);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--sp-md);
+  line-height: 1.5;
+  word-break: break-word;
+}
+.chat-bubble.user {
+  background: var(--green-bg);
+  color: var(--text-primary);
+  align-self: flex-end;
+  border-bottom-right-radius: var(--sp-xs);
+}
+.chat-bubble.ai {
+  background: var(--surface);
+  color: var(--text-primary);
+  align-self: flex-start;
+  border-bottom-left-radius: var(--sp-xs);
+  border: 1px solid var(--border);
+}
+
+/* === 楼盘卡片列表 === */
+.loupan-card {
+  display: flex;
+  gap: var(--sp-md);
+  padding: var(--sp-lg);
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--sp-md);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+.loupan-card:active {
+  transform: scale(0.98);
+}
+.loupan-card .thumb {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-sm);
+  background: #E5E7EB;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+}
+.loupan-card .info {
+  flex: 1;
+  min-width: 0;
+}
+.loupan-card .name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.loupan-card .price {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--warm-accent);
+}
+.loupan-card .meta {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+.loupan-card .tags {
+  display: flex;
+  gap: var(--sp-xs);
+  margin-top: var(--sp-sm);
+  flex-wrap: wrap;
+}
+
+/* === 需求卡片 === */
+.demand-card {
+  background: var(--surface);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  padding: var(--sp-xl) var(--sp-lg);
+  box-shadow: var(--shadow-lg);
+}
+.demand-card .section-title {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--sp-sm);
+}
+.demand-card .tag-row {
+  display: flex;
+  gap: var(--sp-sm);
+  flex-wrap: wrap;
+  margin-bottom: var(--sp-lg);
+}
+
+/* === 底部转化栏 === */
+.convert-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: var(--sp-md) var(--sp-lg);
+  padding-bottom: max(var(--sp-md), env(safe-area-inset-bottom));
+  display: flex;
+  gap: var(--sp-md);
+  z-index: 100;
+}
+.convert-bar .btn {
+  flex: 1;
+}
+
+/* === 悬浮球（经纪人入口） === */
+.floating-avatar {
+  position: fixed;
+  bottom: 80px;
+  right: var(--sp-lg);
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--green-primary);
+  color: white;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  z-index: 99;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+.floating-avatar.hidden {
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+}
+
+/* === 覆盖层（介绍/需求面板） === */
+.overlay-mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 200;
+  display: flex;
+  align-items: flex-end;
+  animation: fadeIn 0.2s;
+}
+.overlay-panel {
+  background: var(--surface);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  width: 100%;
+  max-height: 75vh;
+  overflow-y: auto;
+  padding: var(--sp-xl) var(--sp-lg);
+  animation: slideUp 0.3s ease-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+/* === 知识库列表 === */
+.guide-card {
+  padding: var(--sp-lg);
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--sp-md);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+}
+.guide-card .category {
+  font-size: 0.75rem;
+  color: var(--green-primary);
+  font-weight: 500;
+  margin-bottom: var(--sp-xs);
+}
+.guide-card .title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.guide-card .meta {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: var(--sp-sm);
+}

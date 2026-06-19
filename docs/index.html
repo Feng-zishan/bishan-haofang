@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>璧山好房 · 小平帮你找到理想的家</title>
+<meta name="theme-color" content="#16A085">
+<link rel="manifest" href="manifest.json">
+<style>
+:root {
+  --green: #16A085; --green-dark: #0F7864; --green-light: #E8F5F0;
+  --warm: #E67E22; --warm-light: #FFF3E0;
+  --bg: #F9FAFB; --card: #FFFFFF; --text: #2C3E50;
+  --text-light: #7F8C8D; --border: #E5E7EB;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);
+  --radius: 14px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Microsoft YaHei", "PingFang SC", sans-serif;
+  background: #F0F2F5; display: flex; justify-content: center; align-items: center;
+  min-height: 100vh; padding: 20px;
+}
+.phone-frame {
+  width: 390px; height: 844px; max-width: 100vw; max-height: 100vh;
+  background: var(--bg); border-radius: 28px; overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 0 0 2px #222;
+  position: relative; display: flex; flex-direction: column;
+}
+.phone-notch {
+  height: 44px; background: #222; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 12px; font-weight: 600; letter-spacing: 1px;
+}
+.phone-screen {
+  flex: 1; overflow-y: auto; overflow-x: hidden;
+  scroll-behavior: smooth; -webkit-overflow-scrolling: touch; position: relative;
+}
+.phone-screen::-webkit-scrollbar { width: 0; }
+.status-bar {
+  display: flex; justify-content: space-between;
+  padding: 10px 20px 6px; font-size: 11px;
+  color: var(--text-light); background: var(--bg);
+  position: sticky; top: 0; z-index: 100;
+}
+.screen { display: none; padding: 0 0 20px; animation: fadeSlideIn 0.3s ease; }
+.screen.active { display: block; }
+@keyframes fadeSlideIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+
+/* ── Home ── */
+.hero { text-align: center; padding: 30px 24px 20px; }
+.hero .brand { font-size: 22px; font-weight: 700; color: var(--green-dark); margin-bottom: 2px; }
+.hero .tagline { font-size: 14px; color: var(--text-light); }
+.mic-section { text-align: center; padding: 16px 0 10px; }
+.mic-ring {
+  width: 100px; height: 100px; border-radius: 50%; background: var(--green);
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 6px 24px rgba(22,160,133,0.3);
+}
+.mic-ring:active { transform: scale(0.94); }
+.mic-ring.listening {
+  background: var(--warm); animation: micPulse 1.5s ease-in-out infinite;
+}
+@keyframes micPulse {
+  0%,100% { box-shadow:0 6px 24px rgba(230,126,34,0.3); }
+  50% { box-shadow:0 6px 40px rgba(230,126,34,0.6); }
+}
+.mic-ring svg { width: 42px; height: 42px; fill: #fff; }
+.mic-label { margin-top: 8px; font-size: 14px; color: var(--green-dark); font-weight: 600; }
+.prompt-tags {
+  display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+  padding: 0 20px; margin-top: 6px;
+}
+.prompt-tag {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 20px; padding: 8px 14px; font-size: 12px;
+  color: var(--text); cursor: pointer; transition: all 0.15s; white-space: nowrap;
+  font-family: inherit;
+}
+.prompt-tag:active { border-color: var(--green); background: var(--green-light); color: var(--green-dark); }
+.divider-text {
+  display: flex; align-items: center; gap: 12px;
+  padding: 16px 24px; color: var(--text-light); font-size: 12px;
+}
+.divider-text::before, .divider-text::after { content: ''; flex:1; height:1px; background:var(--border); }
+.quick-links { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 24px; }
+.quick-link {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 16px 14px; text-align: center;
+  cursor: pointer; font-size: 14px; color: var(--text); transition: all 0.15s;
+}
+.quick-link:active { border-color: var(--green); background: var(--green-light); }
+.quick-link .icon { font-size: 28px; margin-bottom: 6px; display: block; }
+
+/* ── Updates Feed ── */
+.updates-section { margin: 18px 20px 0; }
+.updates-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.updates-header h3 { font-size: 15px; font-weight: 700; color: var(--text); }
+.update-cards {
+  display: flex; gap: 10px; overflow-x: auto;
+  scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; padding-bottom: 4px;
+}
+.update-cards::-webkit-scrollbar { display: none; }
+.update-card {
+  width: 280px; flex-shrink: 0; background: var(--card);
+  border-radius: var(--radius); padding: 14px;
+  box-shadow: var(--shadow); border: 1px solid var(--border);
+  scroll-snap-align: start; cursor: pointer; transition: transform 0.15s;
+}
+.update-card:active { transform: scale(0.97); }
+.uc-type { font-size:11px; font-weight:600; padding:3px 8px; border-radius:6px; display:inline-block; margin-bottom:8px; }
+.uc-type.listing { background:#FFE0E0; color:#E74C3C; }
+.uc-type.visit { background:#E0F0FF; color:#2980B9; }
+.uc-type.daily { background:var(--green-light); color:var(--green-dark); }
+.update-card .uc-text { font-size:14px; color:var(--text); line-height:1.5; margin-bottom:4px; }
+.update-card .uc-time { font-size:11px; color:var(--text-light); margin-top:8px; }
+
+/* ── Chat ── */
+.chat-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 20px; background: var(--card);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 10;
+}
+.chat-header .back {
+  width: 32px; height: 32px; border: none; background: var(--bg);
+  border-radius: 50%; font-size: 16px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.chat-header .avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: var(--green); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; flex-shrink: 0;
+}
+.chat-header .name { font-weight:600; font-size:15px; color:var(--text); }
+.chat-header .sub { font-size:11px; color:var(--text-light); }
+.chat-messages {
+  padding: 16px 20px; display: flex; flex-direction: column; gap: 14px; min-height: 360px;
+}
+.chat-msg {
+  max-width: 82%; padding: 12px 15px; border-radius: 18px;
+  font-size: 14px; line-height: 1.6; animation: fadeSlideIn 0.25s ease;
+}
+.chat-msg.bot {
+  align-self: flex-start; background: var(--card);
+  border: 1px solid var(--border); border-bottom-left-radius: 6px; color: var(--text);
+}
+.chat-msg.user {
+  align-self: flex-end; background: var(--green); color: #fff;
+  border-bottom-right-radius: 6px;
+}
+.chat-msg .time { font-size: 10px; margin-top: 6px; opacity: 0.6; display: block; }
+.chat-input-area {
+  padding: 10px 16px; background: var(--card); border-top: 1px solid var(--border);
+  display: flex; gap: 8px; position: sticky; bottom: 0;
+}
+.chat-input-area input {
+  flex: 1; border: 1px solid var(--border); border-radius: 22px;
+  padding: 10px 16px; font-size: 14px; outline: none; font-family: inherit;
+}
+.chat-input-area input:focus { border-color: var(--green); }
+.chat-input-area button {
+  width: 44px; height: 44px; border-radius: 50%; border: none;
+  background: var(--green); color: #fff; font-size: 20px; cursor: pointer; flex-shrink: 0;
+}
+
+/* ── Results ── */
+.results-title { padding: 18px 20px 6px; font-size: 17px; font-weight: 700; color: var(--text); }
+.results-sub { padding: 0 20px 12px; font-size: 13px; color: var(--text-light); }
+.property-list { padding: 0 20px; display: flex; flex-direction: column; gap: 12px; }
+.property-card {
+  background: var(--card); border-radius: var(--radius); padding: 16px;
+  box-shadow: var(--shadow); cursor: pointer; transition: transform 0.15s;
+  border: 1px solid var(--border);
+}
+.property-card:active { transform: scale(0.98); }
+.property-card .p-name { font-size:16px; font-weight:700; color:var(--text); margin-bottom:6px; }
+.property-card .p-meta { display:flex; gap:12px; font-size:13px; color:var(--text-light); margin-bottom:6px; flex-wrap:wrap; }
+.property-card .p-meta span {
+  background: var(--green-light); color: var(--green-dark);
+  padding: 2px 8px; border-radius: 6px; font-size: 12px;
+}
+.property-card .p-review {
+  font-size:13px; color:var(--text); line-height:1.5; margin-top:6px;
+  border-left:3px solid var(--green); padding-left:10px;
+}
+.p-highlight {
+  display:inline-block; background:#FFF3E0; color:var(--warm);
+  font-size:12px; padding:2px 8px; border-radius:6px; margin-left:4px;
+}
+
+/* ── Detail ── */
+.detail-header { position: sticky; top: 0; z-index: 10; background: var(--bg); }
+.detail-header .back-bar { display: flex; align-items: center; gap: 10px; padding: 10px 20px; }
+.detail-header .back-bar button {
+  width: 32px; height: 32px; border: none; background: var(--card);
+  border-radius: 50%; font-size: 16px; cursor: pointer; box-shadow: var(--shadow);
+}
+.detail-hero {
+  background: linear-gradient(135deg, #1a8a74 0%, #16A085 100%);
+  color: #fff; padding: 24px 20px; text-align: center;
+}
+.detail-hero .d-name { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+.detail-hero .d-price { font-size: 28px; font-weight: 700; }
+.detail-hero .d-price small { font-size: 14px; font-weight: 400; opacity: 0.8; }
+.detail-section { margin: 16px 20px; background: var(--card); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); }
+.detail-section h3 { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
+.detail-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.detail-tag { background: var(--green-light); color: var(--green-dark); padding: 6px 12px; border-radius: 8px; font-size: 13px; }
+.review-block .pro { color: #27AE60; font-size: 13px; margin: 4px 0; }
+.review-block .con { color: #E74C3C; font-size: 13px; margin: 4px 0; }
+.review-block .insider {
+  background: #FFF9E6; border-left: 3px solid var(--warm);
+  padding: 10px 14px; border-radius: 0 8px 8px 0;
+  font-size: 13px; color: #8B6914; margin-top: 10px; line-height: 1.5;
+}
+.cta-bar {
+  position: sticky; bottom: 0; background: var(--card);
+  border-top: 1px solid var(--border); padding: 12px 20px;
+  display: flex; align-items: center; gap: 10px;
+}
+.cta-bar .cta-hint { flex:1; font-size:13px; color:var(--text-light); transition:opacity 0.35s; }
+.cta-bar .cta-btn {
+  background: var(--green); color: #fff; border: none; border-radius: 22px;
+  padding: 12px 22px; font-size: 15px; font-weight: 600;
+  cursor: pointer; white-space: nowrap; font-family: inherit;
+}
+.cta-bar .cta-btn:active { transform: scale(0.96); }
+
+/* ── Overlays (Modals) ── */
+.modal-overlay {
+  background: rgba(0,0,0,0.5); position: absolute; inset: 0;
+  display: flex; align-items: flex-end; justify-content: center; z-index: 200;
+}
+.demand-card {
+  background: var(--card); border-radius: 20px 20px 0 0; width: 100%;
+  max-height: 90%; overflow-y: auto; padding: 8px 0 24px;
+  animation: slideUp 0.35s ease;
+}
+@keyframes slideUp { from { transform:translateY(100%); } to { transform:translateY(0); } }
+.demand-card .handle, .broker-intro-card .handle {
+  width: 36px; height: 5px; background: #D1D5DB; border-radius: 3px; margin: 8px auto 16px;
+}
+.demand-card .dc-header { text-align: center; padding: 0 24px; }
+.demand-card .dc-header h2 { font-size: 18px; color: var(--text); font-weight: 700; }
+.demand-card .dc-header p { font-size: 13px; color: var(--text-light); margin-top: 2px; }
+.demand-card .dc-summary {
+  margin: 14px 24px; background: var(--green-light); border-radius: var(--radius);
+  padding: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+}
+.demand-card .dc-item { font-size: 14px; color: var(--text); }
+.demand-card .dc-item strong { display: block; font-size: 11px; color: var(--text-light); margin-bottom: 2px; }
+.qr-section { text-align: center; padding: 8px 24px 0; }
+.qr-section .qr-box {
+  width: 160px; height: 160px; margin: 0 auto 10px;
+  background: #fff; border: 1px solid var(--border); border-radius: 14px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer;
+}
+.qr-box .qr-icon { font-size: 60px; opacity: 0.35; }
+.qr-section .qr-hint { font-size: 14px; color: var(--green-dark); font-weight: 600; margin-bottom: 4px; }
+.qr-section .qr-sub { font-size: 12px; color: var(--text-light); margin-bottom: 14px; }
+.phone-input-section { padding: 0 24px 16px; text-align: center; }
+.phone-input-section .or-divider {
+  display: flex; align-items: center; gap: 10px; margin: 8px 0;
+  color: var(--text-light); font-size: 12px;
+}
+.phone-input-section .or-divider::before, .or-divider::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
+}
+.phone-input-row { display: flex; gap: 8px; }
+.phone-input-row input {
+  flex: 1; border: 1px solid var(--border); border-radius: 22px;
+  padding: 11px 16px; font-size: 15px; outline: none; font-family: inherit;
+}
+.phone-input-row input:focus { border-color: var(--green); }
+.phone-input-row button {
+  background: var(--bg); border: 1px solid var(--border); color: var(--text);
+  border-radius: 22px; padding: 11px 18px; font-size: 14px;
+  cursor: pointer; font-family: inherit; white-space: nowrap;
+}
+.phone-input-row button:active { background: var(--green-light); border-color: var(--green); }
+
+/* ── Broker Intro Card ── */
+.broker-intro-card {
+  background: var(--card); border-radius: 20px 20px 0 0; width: 100%;
+  max-height: 90%; overflow-y: auto; padding: 8px 0 24px;
+  animation: slideUp 0.35s ease;
+}
+.intro-profile { text-align: center; padding: 0 24px 16px; }
+.intro-avatar {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: linear-gradient(135deg, #16A085, #0F7864);
+  color: #fff; font-size: 26px; font-weight: 700;
+  display: inline-flex; align-items: center; justify-content: center;
+  margin-bottom: 10px; box-shadow: 0 4px 16px rgba(22,160,133,0.25);
+}
+.intro-name { font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+.intro-role { font-size: 14px; color: var(--text-light); }
+.intro-badges { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
+.intro-badge {
+  background: var(--green-light); color: var(--green-dark);
+  padding: 5px 12px; border-radius: 14px; font-size: 13px; font-weight: 500;
+}
+.intro-quote {
+  margin: 12px 24px; padding: 14px 18px;
+  background: #FFF9E6; border-left: 3px solid var(--warm);
+  border-radius: 0 10px 10px 0;
+  font-size: 14px; color: #8B6914; line-height: 1.6; text-align: center;
+}
+.intro-specialties { margin: 0 24px; padding: 14px; background: var(--bg); border-radius: var(--radius); text-align: center; }
+.intro-specialties .is-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
+.specialty-tags { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.specialty-tag {
+  background: var(--card); border: 1px solid var(--border);
+  padding: 6px 14px; border-radius: 18px; font-size: 13px; color: var(--text);
+}
+
+/* ── Floating Avatar ── */
+.float-avatar {
+  position: absolute; right: 16px; bottom: 40px;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: rgba(22,160,133,0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #fff; display: none; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 700; z-index: 50; cursor: pointer;
+  box-shadow: 0 3px 12px rgba(22,160,133,0.25);
+  transition: opacity 0.35s, transform 0.35s; opacity: 0.75;
+}
+.float-avatar:active { transform: scale(0.9); }
+.float-avatar.hidden { opacity: 0; pointer-events: none; transform: translateY(20px); }
+
+/* ── Toast ── */
+#toast {
+  display: none; position: fixed; top: 50%; left: 50%;
+  transform: translate(-50%,-50%); background: #2C3E50; color: #fff;
+  padding: 14px 24px; border-radius: 12px; font-size: 14px;
+  z-index: 999; text-align: center; pointer-events: none; white-space: pre-line;
+}
+
+/* ── Desktop Responsive ── */
+@media (min-width: 768px) {
+  .phone-frame { border-radius: 12px; }
+}
+</style>
+</head>
+<body>
+
+<div class="phone-frame" id="app">
+  <div class="phone-notch">璧山好房</div>
+  <div class="phone-screen" id="phoneScreen">
+
+    <!-- ═══════ Screen 1: Home ═══════ -->
+    <div class="screen active" id="screen-home">
+      <div class="status-bar"><span>9:41</span><span>璧山 · 晴 28°</span></div>
+      <div class="hero">
+        <div class="brand">🏠 璧山好房</div>
+        <div class="tagline">小平帮你找到理想的家</div>
+      </div>
+      <div class="mic-section">
+        <div class="mic-ring" id="micBtn" onclick="toggleVoice()">
+          <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
+        </div>
+        <div class="mic-label" id="micLabel">按住说话</div>
+      </div>
+      <div class="prompt-tags">
+        <span class="prompt-tag" onclick="quickStart('刚需')">🏠 刚需首套 60万</span>
+        <span class="prompt-tag" onclick="quickStart('改善')">🏡 改善换房 100万</span>
+        <span class="prompt-tag" onclick="quickStart(null)">🗺️ 随便看看</span>
+      </div>
+      <div class="divider-text">—— 或者 ——</div>
+      <div class="quick-links">
+        <div class="quick-link" onclick="window.location.href='map.html'"><span class="icon">🗺️</span>地图看房</div>
+        <div class="quick-link" onclick="window.location.href='guides.html'"><span class="icon">📝</span>看房知识库</div>
+      </div>
+      <div class="updates-section">
+        <div class="updates-header"><h3>👩‍💼 小平最新动态</h3></div>
+        <div class="update-cards" id="updateCards"></div>
+      </div>
+    </div>
+
+    <!-- ═══════ Screen 2: AI Chat ═══════ -->
+    <div class="screen" id="screen-chat">
+      <div class="chat-header">
+        <button class="back" onclick="goBack()">←</button>
+        <div class="avatar">平</div>
+        <div><div class="name">小平 · 智能助手</div><div class="sub">璧山房产11年 · 在线</div></div>
+      </div>
+      <div class="chat-messages" id="chatMessages"></div>
+      <div class="chat-input-area">
+        <input type="text" placeholder="说说你的需求…" id="chatInput" onkeydown="if(event.key==='Enter')sendChat()">
+        <button onclick="sendChat()">↑</button>
+      </div>
+    </div>
+
+    <!-- ═══════ Screen 3: Results ═══════ -->
+    <div class="screen" id="screen-results">
+      <div class="chat-header">
+        <button class="back" onclick="goBack()">←</button>
+        <div style="font-weight:700;font-size:15px;">精选匹配</div>
+      </div>
+      <div class="results-title" id="resultsTitle">小平帮你筛了这几个</div>
+      <div class="results-sub" id="resultsSub"></div>
+      <div class="property-list" id="propertyList"></div>
+    </div>
+
+    <!-- ═══════ Screen 4: Detail ═══════ -->
+    <div class="screen" id="screen-detail">
+      <div class="detail-header">
+        <div class="back-bar">
+          <button onclick="goBack()">←</button>
+          <span style="font-weight:600;font-size:15px;" id="detailBreadcrumb">楼盘详情</span>
+        </div>
+      </div>
+      <div id="detailContent"></div>
+      <div class="cta-bar">
+        <div class="cta-hint" id="ctaHint">榜单只放了几套，微信上还有更多</div>
+        <button class="cta-btn" onclick="showDemandCard()">加微信聊聊 →</button>
+      </div>
+    </div>
+
+    <!-- ═══════ Floating Avatar ═══════ -->
+    <div class="float-avatar" id="floatAvatar" onclick="showBrokerIntro()">平</div>
+
+    <!-- ═══════ Broker Intro Overlay ═══════ -->
+    <div class="modal-overlay" id="brokerIntroOverlay" style="display:none;" onclick="if(event.target===this)hideBrokerIntro()">
+      <div class="broker-intro-card" onclick="event.stopPropagation()">
+        <div class="handle"></div>
+        <div class="intro-profile">
+          <div class="intro-avatar">平</div>
+          <div class="intro-name">小平</div>
+          <div class="intro-role">璧山独立房产经纪人</div>
+          <div class="intro-badges">
+            <span class="intro-badge">🏅 11年经验</span>
+            <span class="intro-badge">📊 经手500+套</span>
+            <span class="intro-badge">🏆 成交率TOP</span>
+          </div>
+        </div>
+        <div class="intro-quote">💬 "亲切实在，不忽悠，有一说一"<br>"不急，多看几套，买到满意的才是真的"</div>
+        <div class="intro-specialties">
+          <div class="is-title">🏆 擅长领域</div>
+          <div class="specialty-tags">
+            <span class="specialty-tag">璧泉街道</span><span class="specialty-tag">绿岛新区</span>
+            <span class="specialty-tag">老城区</span><span class="specialty-tag">刚需首套</span>
+            <span class="specialty-tag">改善换房</span><span class="specialty-tag">学区房</span>
+          </div>
+        </div>
+        <div class="qr-section" style="margin-top:16px;">
+          <div class="qr-hint">👆 长按识别二维码，加小平微信</div>
+          <div class="qr-box"><div class="qr-icon">⬜</div><div class="qr-label">小平微信<br>二维码</div></div>
+          <div class="qr-sub" id="qrEnvHint2">微信内长按 → 识别 → 添加</div>
+        </div>
+        <div class="phone-input-section">
+          <div class="or-divider">不方便扫码？</div>
+          <div class="phone-input-row">
+            <input type="tel" placeholder="输入手机号（选填）" id="phoneInput2">
+            <button onclick="submitPhone2()">确定</button>
+          </div>
+          <div style="font-size:11px;color:var(--text-light);margin-top:8px;">小平会电话联系你，不会骚扰</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════ Demand Card Overlay ═══════ -->
+    <div class="modal-overlay" id="demandOverlay" style="display:none;" onclick="if(event.target===this)hideDemandCard()">
+      <div class="demand-card" onclick="event.stopPropagation()">
+        <div class="handle"></div>
+        <div class="dc-header"><h2>📋 小平已帮你整理好了</h2><p>加微信时小平会带着这些信息跟你聊</p></div>
+        <div class="dc-summary" id="demandSummary"></div>
+        <div class="qr-section">
+          <div class="qr-box"><div class="qr-icon">⬜</div><div class="qr-label">小平微信<br>二维码</div></div>
+          <div class="qr-hint">👆 长按识别二维码，加小平微信</div>
+          <div class="qr-sub" id="qrEnvHint">微信内长按 → 识别 → 添加</div>
+        </div>
+        <div class="phone-input-section">
+          <div class="or-divider">不方便扫码？</div>
+          <div class="phone-input-row">
+            <input type="tel" placeholder="输入手机号（选填）" id="phoneInput">
+            <button onclick="submitPhone()">确定</button>
+          </div>
+          <div style="font-size:11px;color:var(--text-light);margin-top:8px;">小平会电话联系你，不会骚扰</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast"></div>
+  </div>
+</div>
+
+<!-- ═══════ Scripts ═══════ -->
+<script src="js/config.js"></script>
+<script>
+// ── State ──
+let currentScreen = 'home';
+let currentProperty = null;
+let userProfile = { type: '刚需', budget: '60万', layout: '三房', zone: '璧泉街道' };
+let navStack = [];
+let isGoingBack = false;
+
+// ── Property data (loaded from shared/) ──
+let properties = [];
+
+async function loadProperties() {
+  try {
+    const resp = await fetch('shared/loupan_list.json');
+    const data = await resp.json();
+    properties = (data.loupanList || []).map(lp => ({
+      id: lp.id,
+      name: lp.name,
+      zone: lp.zone,
+      zoneId: lp.zoneId,
+      price: lp.avgPrice,
+      rooms: (lp.layout||[]).join('/'),
+      area: (lp.areaRange||[70,140]).join('-')+'㎡',
+      onSale: parseInt(lp.onSaleApprox) || 0,
+      pros: lp.pros || [],
+      cons: lp.cons || [],
+      insider: lp.brokerComment || '',
+      suitable: (lp.suitableFor||[]).join('、'),
+      tags: lp.tags || [],
+      surrounding: lp.surrounding || {},
+      rating: lp.rating || 3.5
+    }));
+    console.log(`✅ 已加载 ${properties.length} 个楼盘数据`);
+  } catch(e) {
+    console.warn('楼盘数据加载失败，使用内置数据', e);
+    properties = getFallbackProperties();
+  }
+}
+
+function getFallbackProperties() {
+  return [
+    { id:'lp001',name:'恒大名都',zone:'璧泉街道',price:7200,rooms:'二房/三房/四房',area:'75-140㎡',onSale:35,pros:['物业好','近公园','性价比高'],cons:['离地铁稍远','车位紧张'],insider:'恒大在璧山的标杆盘，物业确实好。三房户型方正，得房率不错。',suitable:'改善家庭、预算70-100万' },
+    { id:'lp002',name:'锦绣新城',zone:'璧泉街道',price:6500,rooms:'两房/三房',area:'68-120㎡',onSale:28,pros:['近地铁','配套成熟','总价低'],cons:['小区档次一般','人车不分流'],insider:'璧泉性价比之王，刚需上车首选。离地铁近，周边买菜方便。',suitable:'首次置业、预算50-70万' },
+    { id:'lp003',name:'秀湖壹号',zone:'绿岛新区',price:8600,rooms:'三房/四房/大平层',area:'95-180㎡',onSale:20,pros:['龙湖品质','秀湖景观','物业顶级'],cons:['价格璧山最高','离老城区远'],insider:'璧山品质天花板，龙湖的盘确实不一样。秀湖公园就在楼下。',suitable:'改善升级、预算100万+' },
+    { id:'lp004',name:'璧泉花园',zone:'璧泉街道',price:5800,rooms:'两房/三房',area:'65-110㎡',onSale:32,pros:['近地铁300m','生活便利','物管费合理'],cons:['小区偏旧','车位不足'],insider:'璧泉中规中矩的小区，位置不错，近地铁近菜市场。性价比可以。',suitable:'首次置业、预算55-70万' },
+  ];
+}
+
+// ── Updates Feed ──
+const updates = [
+  { type:'listing', time:'2小时前', text:'刚签恒大名都三房', detail:'78平60万，比市场价低5万，还没上任何平台。采光好，中楼层。' },
+  { type:'visit', time:'昨天', text:'实探锦绣新城二期', detail:'拍了户型视频。二期比一期安静，绿化也更好。' },
+  { type:'daily', time:'2天前', text:'帮客户在璧泉花园砍下3万', detail:'业主急着换房。买房就是信息差，你得知道业主的真实情况。' },
+  { type:'listing', time:'3天前', text:'秀湖壹号业主急售一套', detail:'四房160平，业主换城市，装修保养好，价格可以谈。' },
+];
+
+function renderUpdates() {
+  const c = document.getElementById('updateCards');
+  if (!c) return;
+  const labels = { listing:'🔥 一手房源', visit:'📷 探房纪实', daily:'💬 小平日常' };
+  c.innerHTML = updates.map(u => `
+    <div class="update-card">
+      <span class="uc-type ${u.type}">${labels[u.type]}</span>
+      <div class="uc-text">${u.text}</div>
+      <div class="uc-time">${u.time}</div>
+    </div>`).join('');
+}
+
+// ── Navigation ──
+function goBack() {
+  const bo = document.getElementById('brokerIntroOverlay');
+  const dd = document.getElementById('demandOverlay');
+  if (bo && bo.style.display === 'flex') { hideBrokerIntro(); return; }
+  if (dd && dd.style.display === 'flex') { hideDemandCard(); return; }
+  if (navStack.length === 0) return;
+  isGoingBack = true;
+  goTo(navStack.pop());
+}
+
+function goTo(screen) {
+  if (!isGoingBack && currentScreen && currentScreen !== screen) {
+    navStack.push(currentScreen);
+  }
+  isGoingBack = false;
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const target = document.getElementById('screen-' + screen);
+  if (target) { target.classList.add('active'); document.getElementById('phoneScreen').scrollTop = 0; }
+  currentScreen = screen;
+  hideDemandCard(); hideBrokerIntro();
+  if (screen === 'results') renderResults();
+  if (screen === 'home') renderUpdates();
+
+  const floatAvatar = document.getElementById('floatAvatar');
+  const showAvatar = (screen === 'chat' || screen === 'results');
+  floatAvatar.style.display = showAvatar ? 'flex' : 'none';
+  if (showAvatar) { floatAvatar.classList.remove('hidden'); }
+}
+
+// ── AI Chat ──
+let chatHistory = [];
+
+function quickStart(type) {
+  if (type) userProfile.type = type;
+  goTo('chat');
+  const msgs = document.getElementById('chatMessages'); msgs.innerHTML = '';
+  chatHistory = [];
+
+  const openingMsg = type === '刚需'
+    ? '璧泉附近有没有三房，60万左右，上班方便就行'
+    : '想换个大三房，绿岛新区那边，学区好点的，现在两房不够住了';
+
+  addChatMessage('user', openingMsg);
+  callDeepSeek(openingMsg);
+}
+
+function sendChat() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+  addChatMessage('user', text); input.value = '';
+  callDeepSeek(text);
+}
+
+function addChatMessage(role, text) {
+  const msgs = document.getElementById('chatMessages');
+  const div = document.createElement('div'); div.className = 'chat-msg ' + role;
+  const time = new Date().toLocaleTimeString('zh-CN', {hour:'2-digit',minute:'2-digit'});
+  div.innerHTML = text.replace(/\n/g, '<br>') + '<span class="time">'+time+'</span>';
+  msgs.appendChild(div); msgs.scrollTop = msgs.scrollHeight;
+}
+
+function addActionButton(label, action) {
+  const msgs = document.getElementById('chatMessages');
+  const btn = document.createElement('button');
+  btn.textContent = label;
+  btn.style.cssText = 'margin:8px 0;padding:10px 20px;background:var(--green);color:#fff;border:none;border-radius:20px;font-size:14px;cursor:pointer;font-family:inherit;align-self:flex-start;';
+  btn.onclick = action;
+  msgs.appendChild(btn); msgs.scrollTop = msgs.scrollHeight;
+}
+
+async function callDeepSeek(userMsg) {
+  const key = (typeof CONFIG !== 'undefined' && CONFIG.deepseekKey) || '';
+  if (!key) {
+    // No API key — fallback to demo
+    addChatMessage('bot', '（演示模式）小平在璧山11年了，你刚说的需求她很熟。我帮你筛了几个盘，看看合不合适？');
+    addActionButton('查看精选匹配 →', () => goTo('results'));
+    return;
+  }
+
+  addChatMessage('bot', '…');  // placeholder
+  const placeholder = document.getElementById('chatMessages').lastChild;
+
+  try {
+    // Load broker profile for system prompt
+    let systemPrompt = '你是小平的智能助手。小平是璧山独立房产经纪人，11年经验。风格：亲切实在，有一说一。主动反问了解需求；用小平的口吻推荐；涉及底价/硬伤/谈判→引导加小平微信。永远不说"登录""注册""提交"。';
+    try {
+      const resp = await fetch('shared/broker_profile.json');
+      const p = await resp.json();
+      const s = p.style||{}, a = p.aiPersona||{}, b = p.boundaries||{};
+      systemPrompt = `你是${p.name}的智能助手。${p.name}是${p.role}，${p.experience}。
+说话风格：${s.tone||'亲切实在'}
+口头禅：${(s.signature_phrases||[]).join('、')}
+规则：${(a.toneRules||[]).join('；')}
+不能答的问题（${(b.never_answer||[]).join('、')}）→ 说"${b.redirect_to_xiaoping||'加小平微信聊'}"
+目标：${a.goal||'理解需求→建立信任→转交小平'}`;
+    } catch(e) { /* use default */ }
+
+    chatHistory.push({ role: 'user', content: userMsg });
+
+    const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
+      body: JSON.stringify({
+        model: 'deepseek-chat',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          ...chatHistory.slice(-6)  // keep last 6 messages for context
+        ],
+        temperature: 0.7,
+        max_tokens: 600
+      })
+    });
+
+    const data = await response.json();
+    if (placeholder) placeholder.remove();
+
+    if (data.choices && data.choices[0]) {
+      const reply = data.choices[0].message.content;
+      addChatMessage('bot', reply);
+      chatHistory.push({ role: 'assistant', content: reply });
+
+      // After first meaningful response, offer results
+      if (chatHistory.length <= 3) {
+        addActionButton('查看精选匹配 →', () => goTo('results'));
+      }
+    }
+  } catch(e) {
+    if (placeholder) placeholder.remove();
+    addChatMessage('bot', '小平暂时走开了…要不你先看看地图上的房源？或者长按二维码加她微信，回复更快。');
+  }
+}
+
+// ── Voice Input ──
+let isListening = false;
+
+function toggleVoice() {
+  const btn = document.getElementById('micBtn');
+  const label = document.getElementById('micLabel');
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (isListening) {
+    isListening = false;
+    btn.classList.remove('listening');
+    label.textContent = '按住说话';
+    return;
+  }
+
+  if (!SpeechRecognition) {
+    label.textContent = '浏览器不支持语音，试试打字';
+    return;
+  }
+
+  const recognition = new SpeechRecognition();
+  recognition.lang = 'zh-CN';
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  isListening = true;
+  btn.classList.add('listening');
+  label.textContent = '正在聆听…';
+
+  recognition.onresult = (event) => {
+    const text = event.results[0][0].transcript;
+    isListening = false;
+    btn.classList.remove('listening');
+    label.textContent = '按住说话';
+    quickStart(null);
+    setTimeout(() => {
+      addChatMessage('user', text);
+      callDeepSeek(text);
+    }, 400);
+  };
+
+  recognition.onerror = () => {
+    isListening = false;
+    btn.classList.remove('listening');
+    label.textContent = '未识别，再试一次';
+  };
+
+  recognition.onend = () => {
+    if (isListening) {
+      isListening = false;
+      btn.classList.remove('listening');
+      label.textContent = '按住说话';
+    }
+  };
+
+  recognition.start();
+
+  // Auto-stop after 8 seconds
+  setTimeout(() => {
+    if (isListening) { recognition.stop(); }
+  }, 8000);
+}
+
+// ── Results ──
+function renderResults() {
+  document.getElementById('resultsSub').textContent =
+    `${userProfile.type||'首套'} · ${userProfile.zone||'璧山'} · ${userProfile.budget||'待定'}`;
+
+  // Smart sort: 刚需→价格低优先, 改善→评分高优先
+  let sorted = [...properties];
+  if (userProfile.type === '刚需') {
+    sorted.sort((a,b) => a.price - b.price);
+  } else {
+    sorted.sort((a,b) => (b.rating||0) - (a.rating||0));
+  }
+
+  document.getElementById('propertyList').innerHTML = sorted.slice(0, 5).map(p => `
+    <div class="property-card" onclick="viewDetail('${p.id}')">
+      <div class="p-name">${p.name}
+        ${p.onSale > 10 ? '<span class="p-highlight">在售'+p.onSale+'套</span>' : ''}
+      </div>
+      <div class="p-meta">
+        <span>${p.price.toLocaleString()}元/㎡</span>
+        <span>${p.rooms}</span>
+        <span>${p.zone}</span>
+      </div>
+      <div class="p-review">💬 ${(p.insider||'').slice(0,50)}…</div>
+    </div>
+  `).join('');
+}
+
+// ── Detail ──
+function viewDetail(id) {
+  currentProperty = properties.find(p => p.id === id);
+  if (!currentProperty) { showToast('楼盘数据加载中…'); return; }
+  goTo('detail');
+  document.getElementById('detailBreadcrumb').textContent = currentProperty.name;
+
+  const parking = currentProperty.surrounding || {};
+  document.getElementById('detailContent').innerHTML = `
+    <div class="detail-hero">
+      <div class="d-name">${currentProperty.name}</div>
+      <div class="d-price">${currentProperty.price.toLocaleString()} <small>元/㎡</small></div>
+      <div style="font-size:13px;opacity:0.8;margin-top:4px;">${currentProperty.zone} · ${currentProperty.rooms} · ${currentProperty.area}</div>
+    </div>
+    <div class="detail-section">
+      <h3>📊 价格走势</h3>
+      <div style="display:flex;align-items:flex-end;gap:8px;height:80px;padding:8px 0;">
+        ${[6800,7000,7100,6950,7150,7200].map((v,i) => `
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
+            <div style="width:100%;height:${(v/8600)*60}px;background:var(--green);border-radius:4px 4px 0 0;opacity:${0.4+i*0.12};"></div>
+            <span style="font-size:10px;color:var(--text-light);">${i+1}月</span></div>`).join('')}
+      </div>
+      <div style="text-align:center;font-size:12px;color:var(--text-light);">近6个月参考走势</div>
+    </div>
+    <div class="detail-section">
+      <h3>🏷️ 基本信息</h3>
+      <div class="detail-tags">
+        <span class="detail-tag">🟢 在售约 ${currentProperty.onSale} 套</span>
+        <span class="detail-tag">📐 ${currentProperty.area}</span>
+        <span class="detail-tag">🏘️ ${currentProperty.rooms}</span>
+        <span class="detail-tag">👤 ${currentProperty.suitable}</span>
+      </div>
+    </div>
+    <div class="detail-section">
+      <h3>📍 周边配套</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px;">
+        <div>🏫 ${parking.education||'周边学校'}</div>
+        <div>🏥 ${parking.medical||'周边医院'}</div>
+        <div>🛒 ${parking.shopping||'周边商业'}</div>
+        <div>🌳 ${parking.park||'周边公园'}</div>
+      </div>
+    </div>
+    <div class="detail-section">
+      <h3>💬 小平的独家点评</h3>
+      <div class="review-block">
+        ${(currentProperty.pros||[]).map(p=>'<div class="pro">✅ '+p+'</div>').join('')}
+        ${(currentProperty.cons||[]).map(c=>'<div class="con">⚠️ '+c+'</div>').join('')}
+        <div class="insider">💡 <strong>小平内行提示：</strong>${currentProperty.insider||'暂无'}</div>
+      </div>
+    </div>`;
+}
+
+// ── Demand Card ──
+function showDemandCard() {
+  document.getElementById('demandOverlay').style.display = 'flex';
+  document.getElementById('demandSummary').innerHTML = `
+    <div class="dc-item"><strong>🏠 类型</strong>${userProfile.type||'首套'}</div>
+    <div class="dc-item"><strong>💰 预算</strong>${userProfile.budget||'待定'}</div>
+    <div class="dc-item"><strong>🏘️ 户型</strong>${userProfile.layout||'待定'}</div>
+    <div class="dc-item"><strong>📍 区域</strong>${userProfile.zone||'璧山'}</div>
+    <div class="dc-item"><strong>🏠 最近浏览</strong>${currentProperty?currentProperty.name:'无'}</div>
+    <div class="dc-item"><strong>📱 来源</strong>网页直接访问</div>`;
+  const isWechat = /micromessenger/i.test(navigator.userAgent);
+  document.getElementById('qrEnvHint').textContent =
+    isWechat ? '微信内长按 → 识别图中二维码 → 添加' : '截图保存 → 微信扫一扫 → 添加好友';
+}
+function hideDemandCard() { document.getElementById('demandOverlay').style.display = 'none'; }
+
+// ── Broker Intro ──
+function showBrokerIntro() {
+  document.getElementById('brokerIntroOverlay').style.display = 'flex';
+  const isWechat = /micromessenger/i.test(navigator.userAgent);
+  const hint = document.getElementById('qrEnvHint2');
+  if (hint) hint.textContent = isWechat ? '微信内长按 → 识别图中二维码 → 添加' : '截图保存 → 微信扫一扫 → 添加好友';
+}
+function hideBrokerIntro() { document.getElementById('brokerIntroOverlay').style.display = 'none'; }
+
+function submitPhone2() {
+  const phone = document.getElementById('phoneInput2').value.trim();
+  if (!phone) { showToast('请输入手机号'); return; }
+  if (!/^1[3-9]\d{9}$/.test(phone)) { showToast('请输入正确的手机号'); return; }
+  showToast('✅ 已收到！小平会尽快联系你');
+  document.getElementById('phoneInput2').value = '';
+  setTimeout(hideBrokerIntro, 1500);
+}
+function submitPhone() {
+  const phone = document.getElementById('phoneInput').value.trim();
+  if (!phone) { showToast('请输入手机号'); return; }
+  if (!/^1[3-9]\d{9}$/.test(phone)) { showToast('请输入正确的手机号'); return; }
+  showToast('✅ 已收到！小平会尽快联系你');
+  document.getElementById('phoneInput').value = '';
+  setTimeout(hideDemandCard, 1500);
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.style.display = 'block';
+  clearTimeout(t._timeout);
+  t._timeout = setTimeout(() => t.style.display = 'none', 2500);
+}
+
+// ── Floating Avatar Scroll ──
+const phoneScreen = document.getElementById('phoneScreen');
+const floatAvatar = document.getElementById('floatAvatar');
+let lastScrollY = 0, scrollTick = false;
+
+phoneScreen.addEventListener('scroll', () => {
+  if (!scrollTick) {
+    requestAnimationFrame(() => {
+      const scrollY = phoneScreen.scrollTop;
+      const scrollingDown = scrollY > lastScrollY + 10;
+      const scrollingUp = scrollY < lastScrollY - 10;
+      const atTop = scrollY < 60;
+      if (currentScreen === 'chat' || currentScreen === 'results') {
+        if (scrollingDown && !atTop) floatAvatar.classList.add('hidden');
+        else if (scrollingUp || atTop) floatAvatar.classList.remove('hidden');
+      }
+      lastScrollY = scrollY;
+      scrollTick = false;
+    });
+    scrollTick = true;
+  }
+});
+
+// ── Android Swipe-Back ──
+let touchStartX = 0, touchStartY = 0, swiping = false;
+
+phoneScreen.addEventListener('touchstart', (e) => {
+  const rect = phoneScreen.getBoundingClientRect();
+  touchStartX = e.touches[0].clientX - rect.left;
+  touchStartY = e.touches[0].clientY - rect.top;
+  swiping = false;
+}, {passive: false});
+
+phoneScreen.addEventListener('touchmove', (e) => {
+  const rect = phoneScreen.getBoundingClientRect();
+  const x = e.touches[0].clientX - rect.left;
+  const y = e.touches[0].clientY - rect.top;
+  const dx = x - touchStartX, dy = y - touchStartY;
+  const nearLeft = touchStartX < 30, nearRight = touchStartX > rect.width - 30;
+  const inward = (nearLeft && dx > 0) || (nearRight && dx < 0);
+  if (inward && Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 10) {
+    swiping = true;
+    if (Math.abs(dx) > 15) e.preventDefault();
+  }
+}, {passive: false});
+
+phoneScreen.addEventListener('touchend', (e) => {
+  if (!swiping) return;
+  const rect = phoneScreen.getBoundingClientRect();
+  const dx = e.changedTouches[0].clientX - rect.left - touchStartX;
+  if (Math.abs(dx) > 80) goBack();
+  swiping = false;
+});
+
+// ── CTA Cycling Phrases ──
+const ctaPhrases = [
+  '榜单只放了几套，微信上还有更多',
+  '找小平进一步了解',
+  '联系小平看房，比平台更实在',
+  '微信上小平帮你找更合适的',
+  '小平对这片特别熟，问问她？',
+  '加微信，小平第一时间告诉你降价',
+];
+let ctaCycleIndex = 0;
+setInterval(() => {
+  const hint = document.getElementById('ctaHint');
+  if (hint && currentScreen === 'detail') {
+    hint.style.opacity = '0';
+    setTimeout(() => {
+      ctaCycleIndex = (ctaCycleIndex + 1) % ctaPhrases.length;
+      hint.textContent = ctaPhrases[ctaCycleIndex];
+      hint.style.opacity = '1';
+    }, 400);
+  }
+}, 4000);
+
+// ── Service Worker ──
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+
+// ── Init ──
+renderUpdates();
+loadProperties();
+</script>
+
+</body>
+</html>

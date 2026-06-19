@@ -1,0 +1,175 @@
+/* 璧山好房 · 桌面端样式（≥768px） */
+
+/* === 桌面端侧边栏 === */
+.desktop-layout {
+  display: flex;
+  min-height: 100vh;
+}
+.desktop-sidebar {
+  width: 220px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: var(--sp-xl) var(--sp-lg);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 100;
+}
+.desktop-sidebar .brand {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--green-primary);
+  margin-bottom: var(--sp-2xl);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+}
+.desktop-sidebar .nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  padding: var(--sp-md) var(--sp-lg);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-bottom: 2px;
+}
+.desktop-sidebar .nav-item:hover {
+  background: var(--green-bg);
+  color: var(--green-primary);
+}
+.desktop-sidebar .nav-item.active {
+  background: var(--green-bg);
+  color: var(--green-primary);
+  font-weight: 600;
+}
+.desktop-sidebar .nav-section {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: var(--sp-lg) var(--sp-lg) var(--sp-sm);
+}
+
+.desktop-main {
+  flex: 1;
+  margin-left: 220px;
+  padding: var(--sp-2xl);
+  max-width: calc(100% - 220px);
+}
+
+/* === 桌面端看板 === */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--sp-lg);
+  margin-bottom: var(--sp-xl);
+}
+.stat-card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-xl);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+}
+.stat-card .label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: var(--sp-xs);
+}
+.stat-card .value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.stat-card .change {
+  font-size: 0.8rem;
+  margin-top: var(--sp-xs);
+}
+.stat-card .change.up { color: var(--green-primary); }
+.stat-card .change.down { color: var(--red); }
+
+/* === 桌面端表格 === */
+.data-table {
+  width: 100%;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+}
+.data-table th {
+  text-align: left;
+  padding: var(--sp-md) var(--sp-lg);
+  background: #F9FAFB;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+  border-bottom: 1px solid var(--border);
+}
+.data-table td {
+  padding: var(--sp-md) var(--sp-lg);
+  border-bottom: 1px solid var(--border);
+  font-size: 0.9rem;
+}
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* === 桌面端表单 === */
+.form-group {
+  margin-bottom: var(--sp-lg);
+}
+.form-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: var(--sp-xs);
+}
+.form-input {
+  width: 100%;
+  padding: var(--sp-md) var(--sp-lg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  transition: border-color 0.2s;
+}
+.form-input:focus {
+  outline: none;
+  border-color: var(--green-primary);
+  box-shadow: 0 0 0 3px rgba(22,160,133,0.1);
+}
+
+/* === 桌面端双栏 === */
+.desktop-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-xl);
+}
+
+/* === CTA 引导词轮换 === */
+.cta-rotator {
+  text-align: center;
+  padding: var(--sp-lg);
+}
+.cta-phrase {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  transition: opacity 0.6s;
+}
+
+/* === 隐藏仅移动端的元素 === */
+@media (min-width: 768px) {
+  .mobile-only { display: none !important; }
+}
+
+/* === 隐藏仅桌面端的元素 === */
+@media (max-width: 767px) {
+  .desktop-only { display: none !important; }
+}

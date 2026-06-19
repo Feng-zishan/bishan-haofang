@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>文章详情 · 璧山好房</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/mobile.css">
+</head>
+<body class="mobile-only">
+
+<div class="screen" id="screen-guide-detail">
+  <nav class="mobile-nav">
+    <button class="back" onclick="APP.goBack()">←</button>
+    <span class="title">文章详情</span>
+    <span class="action">♥</span>
+  </nav>
+
+  <div style="padding:20px 16px 80px;" id="articleContent">
+    <div class="tag tag-green" style="margin-bottom:8px;" id="artCategory">板块分析</div>
+    <h2 style="font-size:1.2rem;line-height:1.5;margin-bottom:8px;" id="artTitle">文章标题</h2>
+    <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:20px;" id="artMeta">2026-06-10 · 8分钟 · 小平</div>
+
+    <div style="font-size:0.9rem;line-height:1.8;color:var(--text-primary);" id="artBody">
+      <p>文章内容加载中…</p>
+    </div>
+
+    <!-- 文末转化 -->
+    <div style="margin-top:32px;padding:20px;background:var(--green-bg);border-radius:12px;text-align:center;">
+      <p style="font-size:0.85rem;color:var(--green-dark);margin-bottom:12px;">
+        小平每周写这类分析，加她微信第一时间看
+      </p>
+      <button class="btn btn-primary btn-block" onclick="openDemandCard()">
+        💬 加小平微信
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+  // TODO: 根据 URL 参数加载文章内容
+  const articleId = APP.getParam('id');
+  if (articleId) {
+    fetch('/shared/guides.json')
+      .then(r => r.json())
+      .then(data => {
+        const article = (data.articles || []).find(a => a.id === articleId);
+        if (article) {
+          document.getElementById('artCategory').textContent = article.category;
+          document.getElementById('artTitle').textContent = article.title;
+          document.getElementById('artMeta').textContent = `${article.date} · ${article.readTime} · ${article.author}`;
+          document.getElementById('artBody').innerHTML = `<p>${article.summary}</p><p style="margin-top:16px;color:var(--text-muted);">（完整文章内容由小平后续补充）</p>`;
+        }
+      });
+  }
+</script>
+
+</body>
+</html>

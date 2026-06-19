@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>文章编辑 · 璧山好房后台</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/desktop.css">
+</head>
+<body>
+
+<div class="desktop-layout">
+  <aside class="desktop-sidebar">
+    <div class="brand">🏠 璧山好房</div>
+    <nav>
+      <div class="nav-section">客户端</div>
+      <div class="nav-item" data-nav="home">📊 数据看板</div>
+      <div class="nav-item" data-nav="map">🗺️ 地图看房</div>
+      <div class="nav-section" style="margin-top:12px;">管理端</div>
+      <div class="nav-item" data-nav="admin-loupan">🏠 楼盘管理</div>
+      <div class="nav-item active">✏️ 文章编辑</div>
+      <div class="nav-item" data-nav="admin-leads">📋 留资管理</div>
+    </nav>
+  </aside>
+
+  <main class="desktop-main">
+    <h2 style="margin-bottom:24px;">✏️ 文章编辑</h2>
+    <p style="color:var(--text-muted);margin-bottom:16px;">编写和编辑知识库文章</p>
+
+    <div class="card" style="margin-bottom:16px;">
+      <div class="form-group">
+        <label>文章标题</label>
+        <input class="form-input" placeholder="输入文章标题…">
+      </div>
+      <div class="form-group">
+        <label>分类</label>
+        <select class="form-input">
+          <option>板块分析</option><option>验房技巧</option>
+          <option>市场趋势</option><option>选房攻略</option><option>贷款税费</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>内容</label>
+        <textarea class="form-input" rows="10" placeholder="文章内容…"></textarea>
+      </div>
+      <button class="btn btn-primary">💾 保存文章</button>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-bottom:12px;">现有文章</h3>
+      <div id="existingArticles" style="color:var(--text-muted);">加载中…</div>
+    </div>
+  </main>
+</div>
+
+<script>
+  fetch('/shared/guides.json')
+    .then(r => r.json())
+    .then(data => {
+      document.getElementById('existingArticles').innerHTML = (data.articles||[]).map(a =>
+        `<div style="padding:8px 0;border-bottom:1px solid var(--border);">
+          <strong>${a.title}</strong>
+          <span style="color:var(--text-muted);font-size:0.8rem;margin-left:8px;">${a.category} · ${a.date}</span>
+        </div>`
+      ).join('');
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>看房知识库 · 璧山好房</title>
+<style>
+:root { --green:#16A085; --green-dark:#0F7864; --green-light:#E8F5F0; --warm:#E67E22; --warm-light:#FFF3E0; --bg:#F9FAFB; --card:#FFFFFF; --text:#2C3E50; --text-light:#7F8C8D; --border:#E5E7EB; --radius:14px; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: -apple-system,BlinkMacSystemFont,"Microsoft YaHei","PingFang SC",sans-serif;
+  background: #F0F2F5; display: flex; justify-content: center; align-items: center;
+  min-height: 100vh; padding: 20px;
+}
+.phone-frame {
+  width: 390px; height: 844px; max-width: 100vw; max-height: 100vh;
+  background: var(--bg); border-radius: 28px; overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 0 0 2px #222;
+  display: flex; flex-direction: column;
+}
+.phone-notch {
+  height: 44px; background: #222; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 12px; font-weight: 600; letter-spacing: 1px;
+}
+.phone-screen { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+.phone-screen::-webkit-scrollbar { width:0; }
+
+/* Nav */
+.guide-nav {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 16px; background: var(--card);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 10;
+}
+.guide-nav .back {
+  width: 32px; height: 32px; border: none; background: var(--bg);
+  border-radius: 50%; font-size: 16px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.guide-nav .title { font-weight: 600; font-size: 15px; color: var(--text); }
+
+/* Category tabs */
+.cat-tabs {
+  display: flex; gap: 8px; padding: 14px 16px; overflow-x: auto;
+  position: sticky; top: 48px; background: var(--bg); z-index: 9;
+}
+.cat-tabs::-webkit-scrollbar { display: none; }
+.cat-tab {
+  padding: 7px 16px; border-radius: 18px; border: 1px solid var(--border);
+  background: var(--card); font-size: 13px; color: var(--text);
+  cursor: pointer; white-space: nowrap; font-family: inherit;
+  transition: all 0.15s;
+}
+.cat-tab.active { background: var(--green); color: #fff; border-color: var(--green); }
+.cat-tab:active { transform: scale(0.95); }
+
+/* Article list */
+.article-list { padding: 0 16px 24px; }
+.article-card {
+  background: var(--card); border-radius: var(--radius);
+  padding: 18px; margin-bottom: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04); cursor: pointer;
+  border: 1px solid var(--border);
+  transition: transform 0.15s;
+}
+.article-card:active { transform: scale(0.98); }
+.article-card .ac-cat {
+  font-size: 11px; color: var(--green); font-weight: 600;
+  margin-bottom: 6px; display: inline-block;
+}
+.article-card .ac-title { font-size: 16px; font-weight: 700; color: var(--text); line-height: 1.4; margin-bottom: 6px; }
+.article-card .ac-summary { font-size: 13px; color: var(--text-light); line-height: 1.5; margin-bottom: 8px; }
+.article-card .ac-meta { font-size: 12px; color: var(--text-light); }
+
+/* Detail overlay */
+.detail-overlay {
+  position: fixed; inset: 0; background: var(--bg); z-index: 200;
+  display: none; flex-direction: column;
+}
+.detail-overlay.show { display: flex; }
+.detail-overlay .do-nav {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 16px; background: var(--card);
+  border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+.detail-overlay .do-nav button {
+  width: 32px; height: 32px; border: none; background: var(--bg);
+  border-radius: 50%; font-size: 16px; cursor: pointer;
+}
+.detail-overlay .do-content {
+  flex: 1; overflow-y: auto; padding: 20px 18px 40px;
+}
+.do-content .do-cat {
+  display: inline-block; background: var(--green-light); color: var(--green-dark);
+  padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-bottom: 12px;
+}
+.do-content h2 { font-size: 20px; line-height: 1.4; margin-bottom: 8px; color: var(--text); }
+.do-content .do-meta { font-size: 13px; color: var(--text-light); margin-bottom: 20px; }
+.do-content .do-body { font-size: 15px; line-height: 1.9; color: var(--text); }
+.do-content .do-body p { margin-bottom: 14px; }
+.do-content .do-cta {
+  margin-top: 32px; padding: 20px; background: var(--green-light);
+  border-radius: var(--radius); text-align: center;
+}
+.do-content .do-cta p { font-size: 14px; color: var(--green-dark); margin-bottom: 12px; }
+.do-content .do-cta button {
+  padding: 12px 28px; background: var(--green); color: #fff;
+  border: none; border-radius: 22px; font-size: 15px; font-weight: 600;
+  cursor: pointer; font-family: inherit;
+}
+.do-content .do-cta button:active { transform: scale(0.95); }
+
+/* Desktop */
+@media (min-width: 768px) {
+  .phone-frame { border-radius: 12px; }
+}
+</style>
+</head>
+<body>
+
+<div class="phone-frame">
+  <div class="phone-notch">看房知识库</div>
+  <div class="phone-screen" id="phoneScreen">
+
+    <!-- Nav -->
+    <nav class="guide-nav">
+      <button class="back" onclick="history.back()">←</button>
+      <span class="title">📝 看房知识库</span>
+    </nav>
+
+    <!-- Category tabs -->
+    <div class="cat-tabs" id="catTabs">
+      <button class="cat-tab active" onclick="filterArticles('all')">全部</button>
+      <button class="cat-tab" onclick="filterArticles('板块分析')">🏠 板块分析</button>
+      <button class="cat-tab" onclick="filterArticles('验房技巧')">🔍 验房技巧</button>
+      <button class="cat-tab" onclick="filterArticles('市场趋势')">📊 市场趋势</button>
+      <button class="cat-tab" onclick="filterArticles('选房攻略')">💡 选房攻略</button>
+      <button class="cat-tab" onclick="filterArticles('贷款税费')">💰 贷款税费</button>
+    </div>
+
+    <!-- Article list -->
+    <div class="article-list" id="articleList">
+      <p style="text-align:center;color:var(--text-light);padding:40px;">加载中…</p>
+    </div>
+
+    <!-- Article detail overlay -->
+    <div class="detail-overlay" id="detailOverlay">
+      <div class="do-nav">
+        <button onclick="closeDetail()">←</button>
+        <span style="font-weight:600;font-size:15px;">文章详情</span>
+      </div>
+      <div class="do-content" id="doContent"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+let allArticles = [];
+let currentCategory = 'all';
+
+// Load articles
+fetch('shared/guides.json')
+  .then(r => r.json())
+  .then(data => {
+    allArticles = data.articles || [];
+    renderArticles(allArticles);
+  })
+  .catch(() => {
+    document.getElementById('articleList').innerHTML =
+      '<p style="text-align:center;color:var(--text-light);padding:40px;">知识库文章加载中…<br><small>请确保 shared/guides.json 可访问</small></p>';
+  });
+
+function renderArticles(articles) {
+  if (articles.length === 0) {
+    document.getElementById('articleList').innerHTML =
+      '<p style="text-align:center;color:var(--text-light);padding:40px;">该分类暂无文章</p>';
+    return;
+  }
+  document.getElementById('articleList').innerHTML = articles.map(a => `
+    <div class="article-card" onclick="openDetail('${a.id}')">
+      <span class="ac-cat">${a.category}</span>
+      <div class="ac-title">${a.title}</div>
+      <div class="ac-summary">${a.summary.slice(0, 60)}…</div>
+      <div class="ac-meta">${a.date} · ${a.readTime} · ${a.author}</div>
+    </div>
+  `).join('');
+}
+
+function filterArticles(cat) {
+  currentCategory = cat;
+  document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+  const activeBtn = document.querySelector(`.cat-tab[onclick="filterArticles('${cat}')"]`);
+  if (activeBtn) activeBtn.classList.add('active');
+
+  if (cat === 'all') {
+    renderArticles(allArticles);
+  } else {
+    renderArticles(allArticles.filter(a => a.category === cat));
+  }
+}
+
+function openDetail(id) {
+  const article = allArticles.find(a => a.id === id);
+  if (!article) return;
+
+  document.getElementById('detailOverlay').classList.add('show');
+  document.getElementById('doContent').innerHTML = `
+    <span class="do-cat">${article.category}</span>
+    <h2>${article.title}</h2>
+    <div class="do-meta">${article.date} · ${article.readTime} · ${article.author}</div>
+    <div class="do-body">
+      <p>${article.summary}</p>
+      <p style="color:var(--text-light);">（完整文章内容由小平后续补充。以上为文章摘要，获取完整文章请加小平微信。）</p>
+    </div>
+    <div class="do-cta">
+      <p>小平每周写这类分析，加她微信第一时间看</p>
+      <button onclick="window.location.href='index.html'">💬 加小平微信 →</button>
+    </div>
+  `;
+  document.getElementById('phoneScreen').scrollTop = 0;
+}
+
+function closeDetail() {
+  document.getElementById('detailOverlay').classList.remove('show');
+}
+</script>
+
+</body>
+</html>

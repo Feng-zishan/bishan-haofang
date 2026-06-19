@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>AI 匹配结果 · 璧山好房</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/mobile.css">
+  <link rel="stylesheet" href="css/desktop.css">
+</head>
+<body class="mobile-only">
+
+<div class="screen" id="screen-results">
+  <!-- 顶部导航 -->
+  <nav class="mobile-nav">
+    <button class="back" onclick="APP.goBack()">←</button>
+    <span class="title">精选匹配</span>
+    <span class="action"></span>
+  </nav>
+
+  <!-- AI 总结 -->
+  <div style="padding:16px;background:var(--green-bg);margin:12px 16px;border-radius:var(--radius-md);">
+    <p style="font-size:0.9rem;color:var(--green-dark);" id="aiSummary">
+      小平帮你筛了这几套，看看合不合适？
+    </p>
+  </div>
+
+  <!-- 筛选标签 -->
+  <div style="padding:0 16px 12px;display:flex;gap:8px;overflow-x:auto;" id="filterTags">
+    <button class="tag tag-green" onclick="filterResults('all')">全部</button>
+    <button class="tag tag-gray" onclick="filterResults('刚需')">💰 刚需</button>
+    <button class="tag tag-gray" onclick="filterResults('改善')">🏡 改善</button>
+  </div>
+
+  <!-- 楼盘列表 -->
+  <div style="padding:0 16px 80px;" id="loupanList">
+    <!-- 动态渲染 -->
+  </div>
+
+  <!-- 底部地图入口 -->
+  <div class="convert-bar">
+    <button class="btn btn-secondary" onclick="APP.goTo('screen-map')">
+      🗺️ 在地图上查看
+    </button>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script src="js/ai-match.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    await AIMatcher.loadData();
+    renderLoupanList(AIMatcher.loupanData);
+  });
+
+  function renderLoupanList(list, limit = 5) {
+    const container = document.getElementById('loupanList');
+    const subset = list.slice(0, limit);
+
+    container.innerHTML = subset.map(lp => `
+      <div class="loupan-card" onclick="APP.goTo('screen-detail')">
+        <div class="thumb">🏠</div>
+        <div class="info">
+          <div class="name">${lp.name}</div>
+          <div class="meta">${lp.zone} · ${lp.builtYear}年 · ${lp.layout.join('/')}</div>
+          <div class="price">${lp.avgPrice.toLocaleString()}元/㎡</div>
+          <div class="tags">
+            ${(lp.tags || []).slice(0, 3).map(t => `<span class="tag tag-green">${t}</span>`).join('')}
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function filterResults(type) {
+    if (type === 'all') {
+      renderLoupanList(AIMatcher.loupanData);
+    } else {
+      const filtered = AIMatcher.loupanData.filter(l => l.type.includes(type));
+      renderLoupanList(filtered);
+    }
+  }
+</script>
+
+</body>
+</html>

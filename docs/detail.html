@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>楼盘详情 · 璧山好房</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/mobile.css">
+  <link rel="stylesheet" href="css/desktop.css">
+</head>
+<body class="mobile-only">
+
+<div class="screen" id="screen-detail">
+  <!-- 顶部 -->
+  <nav class="mobile-nav">
+    <button class="back" onclick="APP.goBack()">←</button>
+    <span class="title" id="detailName">楼盘详情</span>
+    <span class="action">♥</span>
+  </nav>
+
+  <!-- 内容滚动区 -->
+  <div style="padding:0 16px 100px;" id="detailContent">
+    <!-- 🟢 公开层 -->
+    <div style="text-align:center;padding:16px 0;">
+      <div style="font-size:1.3rem;font-weight:700;" id="lpName">恒大名都</div>
+      <div style="color:var(--text-muted);font-size:0.85rem;margin-top:4px;" id="lpZone">璧泉街道 · 2018年建</div>
+      <div style="font-size:1.6rem;font-weight:700;color:var(--warm-accent);margin-top:8px;" id="lpPrice">7,200元/㎡</div>
+    </div>
+
+    <!-- 标签 -->
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;" id="lpTags">
+      <span class="tag tag-green">品牌开发商</span>
+      <span class="tag tag-green">物业好</span>
+      <span class="tag tag-warm">近公园</span>
+    </div>
+
+    <!-- 🟢 经纪人点评 -->
+    <div class="card" style="margin-bottom:12px;">
+      <div style="font-size:0.85rem;color:var(--text-muted);margin-bottom:4px;">💬 小平说</div>
+      <p style="font-size:0.9rem;line-height:1.6;color:var(--text-primary);" id="lpComment">
+        恒大在璧山的标杆盘，物业确实好，小区环境没得挑。
+      </p>
+    </div>
+
+    <!-- 优势/劣势 -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+      <div class="card" style="background:#E8F8F5;">
+        <div style="font-size:0.8rem;color:var(--green-primary);font-weight:600;margin-bottom:6px;">👍 优点</div>
+        <ul style="font-size:0.8rem;" id="lpPros">
+          <li>物业口碑好</li><li>小区绿化率高</li>
+        </ul>
+      </div>
+      <div class="card" style="background:#FEF3C7;">
+        <div style="font-size:0.8rem;color:var(--warm-accent);font-weight:600;margin-bottom:6px;">👀 注意</div>
+        <ul style="font-size:0.8rem;" id="lpCons">
+          <li>离地铁稍远</li><li>车位紧张</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 🟡 概数层 -->
+    <div class="card" style="margin-bottom:12px;text-align:center;">
+      <div style="font-size:0.85rem;color:var(--text-secondary);">
+        本小区在售约 <strong style="color:var(--green-primary);font-size:1.2rem;" id="lpOnSale">35套</strong>
+      </div>
+      <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">
+        户型覆盖两房到四房
+      </div>
+    </div>
+
+    <!-- 周边配套 -->
+    <div class="card" style="margin-bottom:12px;">
+      <div style="font-size:0.85rem;font-weight:600;margin-bottom:8px;">📍 周边配套</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:0.8rem;" id="lpSurrounding">
+        <div>🏫 璧泉小学</div>
+        <div>🏥 区人民医院 1.5km</div>
+        <div>🛒 恒大商业街</div>
+        <div>🌳 秀湖公园 800m</div>
+      </div>
+    </div>
+
+    <!-- 价格走势（占位） -->
+    <div class="card" style="margin-bottom:12px;text-align:center;">
+      <div style="font-size:0.85rem;font-weight:600;margin-bottom:8px;">📈 价格走势</div>
+      <canvas id="priceChart" height="160"></canvas>
+    </div>
+  </div>
+
+  <!-- 🔒 底部转化栏 -->
+  <div class="convert-bar">
+    <button class="btn btn-warm btn-lg" onclick="openDemandCard()">
+      💬 加小平微信看完整房源
+    </button>
+  </div>
+</div>
+
+<!-- 需求卡片覆盖层 -->
+<div class="overlay-mask" id="demandOverlay" style="display:none;" onclick="if(event.target===this)closeDemandCard()">
+  <div class="overlay-panel" id="demandPanel">
+    <!-- 动态填充 -->
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script src="js/lead-capture.js"></script>
+<script>
+  function openDemandCard() {
+    document.getElementById('demandOverlay').style.display = 'flex';
+    document.getElementById('demandPanel').innerHTML = `
+      <div style="text-align:center;">
+        <h3 style="font-size:1.1rem;margin-bottom:4px;">📋 小平已帮你整理好了</h3>
+        <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:16px;">加微信，小平第一时间回复</p>
+
+        <div style="margin-bottom:16px;">
+          <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap;">
+            <span class="tag tag-warm">🏠 刚需</span>
+            <span class="tag tag-green">💰 60万预算</span>
+            <span class="tag tag-green">🏘️ 三房</span>
+          </div>
+        </div>
+
+        <div style="background:#F9FAFB;border-radius:12px;padding:20px;margin-bottom:16px;">
+          <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:8px;">
+            👆 长按识别二维码，加小平微信
+          </div>
+          <div style="width:160px;height:160px;background:#E5E7EB;margin:0 auto;border-radius:8px;
+                      display:flex;align-items:center;justify-content:center;font-size:3rem;">
+            📱
+          </div>
+          <div style="font-size:0.75rem;color:var(--text-muted);margin-top:8px;">
+            （微信二维码）
+          </div>
+        </div>
+
+        <div class="divider">或者</div>
+
+        <div style="display:flex;gap:8px;margin-top:12px;">
+          <input type="tel" placeholder="留电话也行（选填）" id="leadPhone"
+                 style="flex:1;padding:12px;border:1px solid var(--border);border-radius:8px;font-size:0.9rem;">
+          <button class="btn btn-primary" onclick="submitLead()">确定</button>
+        </div>
+      </div>
+    `;
+  }
+
+  function closeDemandCard() {
+    document.getElementById('demandOverlay').style.display = 'none';
+  }
+
+  function submitLead() {
+    const phone = document.getElementById('leadPhone')?.value || '';
+    closeDemandCard();
+    alert('已收到！小平会尽快联系你 📧');
+  }
+</script>
+
+</body>
+</html>

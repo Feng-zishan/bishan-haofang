@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>地图看房 · 璧山好房</title>
+<style>
+:root { --green:#16A085; --green-dark:#0F7864; --warm:#E67E22; --bg:#F9FAFB; --card:#FFFFFF; --text:#2C3E50; --text-light:#7F8C8D; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: -apple-system,BlinkMacSystemFont,"Microsoft YaHei","PingFang SC",sans-serif; }
+
+/* Mobile nav */
+.map-nav {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 16px; background: var(--card);
+  border-bottom: 1px solid #E5E7EB;
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 48px;
+}
+.map-nav .back {
+  width: 32px; height: 32px; border: none; background: #F3F4F6;
+  border-radius: 50%; font-size: 16px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.map-nav .title { font-weight: 600; font-size: 15px; color: var(--text); }
+
+/* Map container */
+#mapContainer {
+  width: 100%; height: 100vh;
+  position: fixed; top: 48px; left: 0; right: 0; bottom: 0;
+}
+
+/* Zone filter bar */
+.zone-filter {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 6px; overflow-x: auto; padding: 0 4px;
+  z-index: 50; white-space: nowrap; max-width: 95vw;
+}
+.zone-filter::-webkit-scrollbar { display: none; }
+.zone-filter .zf-chip {
+  padding: 6px 14px; border-radius: 18px; border: none;
+  font-size: 12px; font-weight: 500; cursor: pointer;
+  background: var(--card); color: var(--text);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12); white-space: nowrap;
+  font-family: inherit; transition: all 0.2s;
+}
+.zone-filter .zf-chip.active { background: var(--green); color: #fff; }
+.zone-filter .zf-chip:active { transform: scale(0.95); }
+
+/* Price legend */
+.price-legend {
+  position: fixed; top: 60px; right: 12px;
+  background: var(--card); border-radius: 10px;
+  padding: 10px 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+  font-size: 11px; color: var(--text-light); z-index: 50;
+}
+.price-legend .dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:4px; }
+
+/* Detail card (slide-up) */
+.detail-card-overlay {
+  position: fixed; inset:0; background:rgba(0,0,0,0.4); z-index:200;
+  display: none; align-items: flex-end;
+}
+.detail-card-overlay.show { display: flex; }
+.detail-card-panel {
+  background: var(--card); border-radius: 18px 18px 0 0;
+  width: 100%; max-height: 60vh; overflow-y: auto;
+  padding: 20px; animation: slideUp 0.3s ease;
+}
+@keyframes slideUp { from {transform:translateY(100%);} to {transform:translateY(0);} }
+.detail-card-panel .close-row { display:flex; justify-content:flex-end; margin-bottom:8px; }
+.detail-card-panel .close-row button {
+  width:30px; height:30px; border-radius:50%; border:none;
+  background:#F3F4F6; font-size:16px; cursor:pointer;
+}
+.detail-card-panel .dcp-name { font-size:18px; font-weight:700; color:var(--text); margin-bottom:6px; }
+.detail-card-panel .dcp-price { font-size:20px; font-weight:700; color:var(--warm); margin-bottom:4px; }
+.detail-card-panel .dcp-meta { font-size:13px; color:var(--text-light); margin-bottom:12px; }
+.detail-card-panel .dcp-tags { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px; }
+.detail-card-panel .dcp-tags span {
+  background:#E8F5F0; color:var(--green-dark); padding:4px 10px; border-radius:12px; font-size:12px;
+}
+.detail-card-panel .dcp-comment {
+  background:#FFF9E6; border-left:3px solid var(--warm);
+  padding:10px 14px; border-radius:0 8px 8px 0; font-size:13px; line-height:1.5; margin-bottom:12px;
+}
+
+/* Desktop sidebar */
+@media (min-width: 768px) {
+  .map-nav { left: 220px; }
+  #mapContainer { left: 220px; }
+  .desktop-sidebar {
+    position: fixed; top:0; left:0; bottom:0; width:220px;
+    background:var(--card); border-right:1px solid #E5E7EB;
+    padding:24px 16px; z-index:110; display:flex; flex-direction:column;
+  }
+  .desktop-sidebar .brand { font-size:18px; font-weight:700; color:var(--green); margin-bottom:24px; }
+  .desktop-sidebar .nav-item {
+    padding:10px 14px; border-radius:8px; font-size:14px; color:var(--text-light);
+    cursor:pointer; margin-bottom:2px; transition:all 0.15s;
+  }
+  .desktop-sidebar .nav-item:hover { background:#E8F5F0; color:var(--green); }
+  .desktop-sidebar .nav-item.active { background:#E8F5F0; color:var(--green); font-weight:600; }
+  .zone-filter { bottom: 32px; }
+}
+@media (max-width: 767px) {
+  .desktop-sidebar { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- Desktop sidebar -->
+<aside class="desktop-sidebar">
+  <div class="brand">🏠 璧山好房</div>
+  <nav>
+    <div class="nav-item" onclick="window.location.href='index.html'">📊 首页</div>
+    <div class="nav-item active">🗺️ 地图看房</div>
+    <div class="nav-item" onclick="window.location.href='guides.html'">📝 知识库</div>
+  </nav>
+</aside>
+
+<!-- Mobile nav -->
+<nav class="map-nav">
+  <button class="back" onclick="history.back()">←</button>
+  <span class="title">🗺️ 璧山好房地图</span>
+</nav>
+
+<!-- Map -->
+<div id="mapContainer"></div>
+
+<!-- Zone filter -->
+<div class="zone-filter" id="zoneFilter"></div>
+
+<!-- Price legend -->
+<div class="price-legend" id="priceLegend"></div>
+
+<!-- Detail card overlay -->
+<div class="detail-card-overlay" id="detailOverlay" onclick="if(event.target===this)closeDetail()">
+  <div class="detail-card-panel" id="detailPanel" onclick="event.stopPropagation()"></div>
+</div>
+
+<script src="js/config.js"></script>
+<script>
+// ── Load AMap SDK ──
+function loadAMap(key) {
+  return new Promise((resolve, reject) => {
+    if (window.AMap) { resolve(); return; }
+    const script = document.createElement('script');
+    script.src = `https://webapi.amap.com/maps?v=2.0&key=${key}`;
+    script.onload = resolve;
+    script.onerror = () => reject(new Error('高德地图加载失败'));
+    document.head.appendChild(script);
+  });
+}
+
+// ── Init ──
+async function initMap() {
+  const key = (typeof CONFIG !== 'undefined' && CONFIG.amapKey) || '';
+  if (!key) {
+    document.getElementById('mapContainer').innerHTML =
+      '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#7F8C8D;"><div style="text-align:center;"><div style="font-size:3rem;">🗺️</div><p>地图需要高德 API Key</p></div></div>';
+    return;
+  }
+
+  try {
+    await loadAMap(key);
+  } catch(e) {
+    document.getElementById('mapContainer').innerHTML =
+      '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#E74C3C;"><p>地图加载失败：'+e.message+'</p></div>';
+    return;
+  }
+
+  const map = new AMap.Map('mapContainer', {
+    zoom: 14,
+    center: [106.2315, 29.5920],
+    mapStyle: 'amap://styles/light',
+    resizeEnable: true,
+    touchZoom: true,
+    dragEnable: true
+  });
+
+  // Load data
+  let zones = [], loupanList = [];
+  try {
+    const [zResp, lResp] = await Promise.all([
+      fetch('shared/bishan_zones.json'),
+      fetch('shared/loupan_list.json')
+    ]);
+    zones = ((await zResp.json()).zones || []);
+    loupanList = ((await lResp.json()).loupanList || []);
+  } catch(e) { console.warn('数据加载失败', e); }
+
+  // Draw zone polygons
+  zones.forEach(zone => {
+    if (!zone.boundary || zone.boundary.length < 3) return;
+    const polygon = new AMap.Polygon({
+      path: zone.boundary,
+      fillColor: zone.color || '#16A085',
+      fillOpacity: 0.12,
+      strokeColor: zone.color || '#16A085',
+      strokeWeight: 2,
+      strokeOpacity: 0.5,
+      zIndex: 10
+    });
+    polygon.on('click', () => {
+      map.setCenter(zone.center);
+      if (map.getZoom() < 14) map.setZoom(14);
+    });
+    map.add(polygon);
+
+    // Zone label
+    const labelMarker = new AMap.Marker({
+      position: zone.center,
+      content: `<div style="background:${zone.color||'#16A085'};color:#fff;padding:3px 12px;border-radius:14px;font-size:13px;font-weight:500;box-shadow:0 2px 8px rgba(0,0,0,0.15);white-space:nowrap;">${zone.name}</div>`,
+      offset: new AMap.Pixel(-30, -12),
+      zIndex: 20
+    });
+    map.add(labelMarker);
+  });
+
+  // Loupan markers
+  loupanList.forEach(lp => {
+    if (!lp.coords) return;
+    const priceLabel = lp.avgPrice < 6000
+      ? `${lp.avgPrice}元`
+      : `${(lp.avgPrice/1000).toFixed(1)}k`;
+
+    const marker = new AMap.Marker({
+      position: lp.coords,
+      content: `<div style="background:#fff;padding:4px 12px;border-radius:14px;font-size:12px;box-shadow:0 2px 8px rgba(0,0,0,0.15);border:2px solid ${lp.zoneId==='lvdao'?'#27AE60':lp.zoneId==='biquan'?'#2ECC71':'#16A085'};white-space:nowrap;cursor:pointer;font-weight:500;">${lp.name.slice(0,5)} ${priceLabel}</div>`,
+      offset: new AMap.Pixel(-35, -14),
+      zIndex: 30
+    });
+    marker.on('click', () => showLoupanDetail(lp));
+    map.add(marker);
+  });
+
+  // Build zone filter
+  const filterDiv = document.getElementById('zoneFilter');
+  filterDiv.innerHTML = [
+    { id:'all', name:'全部' },
+    ...zones.map(z => ({ id:z.id, name:z.name }))
+  ].map(z => `<button class="zf-chip ${z.id==='all'?'active':''}" onclick="filterZone('${z.id}')">${z.name}</button>`).join('');
+
+  // Price legend
+  const prices = loupanList.map(l => l.avgPrice).filter(Boolean);
+  if (prices.length) {
+    const min = Math.min(...prices), max = Math.max(...prices);
+    document.getElementById('priceLegend').innerHTML = `
+      <div style="font-weight:600;margin-bottom:4px;">均价</div>
+      <div><span class="dot" style="background:#E74C3C;"></span>${(max/1000).toFixed(1)}k 高</div>
+      <div><span class="dot" style="background:#F39C12;"></span>${((min+max)/2000).toFixed(1)}k 中</div>
+      <div><span class="dot" style="background:#27AE60;"></span>${(min/1000).toFixed(1)}k 低</div>`;
+  }
+
+  // Store state
+  window._mapState = { map, zones, loupanList };
+}
+
+// ── Zone filter ──
+function filterZone(zoneId) {
+  const state = window._mapState;
+  if (!state) return;
+
+  // Update chip styles
+  document.querySelectorAll('.zf-chip').forEach(c => c.classList.remove('active'));
+  const activeChip = document.querySelector(`.zf-chip[onclick="filterZone('${zoneId}')"]`);
+  if (activeChip) activeChip.classList.add('active');
+
+  if (zoneId === 'all') {
+    state.map.setCenter([106.2315, 29.5920]);
+    state.map.setZoom(14);
+    return;
+  }
+
+  const zone = state.zones.find(z => z.id === zoneId);
+  if (zone) {
+    state.map.setCenter(zone.center);
+    state.map.setZoom(15);
+  }
+}
+
+// ── Loupan detail popup ──
+function showLoupanDetail(lp) {
+  const overlay = document.getElementById('detailOverlay');
+  const panel = document.getElementById('detailPanel');
+
+  panel.innerHTML = `
+    <div class="close-row"><button onclick="closeDetail()">✕</button></div>
+    <div class="dcp-name">${lp.name}</div>
+    <div class="dcp-price">${lp.avgPrice.toLocaleString()} 元/㎡</div>
+    <div class="dcp-meta">${lp.zone} · ${lp.builtYear}年 · ${(lp.layout||[]).join('/')} · ${lp.areaRange?lp.areaRange[0]+'-'+lp.areaRange[1]+'㎡':''}</div>
+    <div class="dcp-tags">${(lp.tags||[]).slice(0,5).map(t=>`<span>${t}</span>`).join('')}</div>
+    <div class="dcp-comment">💡 <strong>小平说：</strong>${lp.brokerComment||'暂无点评'}</div>
+    <div style="display:flex;gap:8px;">
+      <button onclick="closeDetail()" style="flex:1;padding:12px;border-radius:22px;border:1px solid #E5E7EB;background:#fff;font-size:14px;cursor:pointer;font-family:inherit;">关闭</button>
+      <a href="index.html" style="flex:1;padding:12px;border-radius:22px;border:none;background:var(--green,#16A085);color:#fff;font-size:14px;cursor:pointer;font-family:inherit;text-decoration:none;text-align:center;font-weight:600;">加微信聊聊 →</a>
+    </div>
+  `;
+
+  overlay.classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDetail() {
+  document.getElementById('detailOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+// ── Boot ──
+initMap();
+</script>
+
+</body>
+</html>

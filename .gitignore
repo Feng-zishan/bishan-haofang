@@ -1,0 +1,17 @@
+# 璧山好房 · Git 忽略规则
+
+# 🔒 私有数据
+private/
+
+# 系统文件
+.DS_Store
+Thumbs.db
+node_modules/
+
+# 编辑临时文件
+*~
+*.swp
+*.tmp
+
+# 演示文件（不部署）
+demo.html

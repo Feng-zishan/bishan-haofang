@@ -1,0 +1,94 @@
+{
+  "lastUpdated": "2026-06-19",
+  "totalArticles": 8,
+  "articles": [
+    {
+      "id": "g001",
+      "title": "璧山买房地图：六个板块怎么选？",
+      "category": "板块分析",
+      "author": "小平",
+      "date": "2026-05-15",
+      "summary": "璧山六个主要板块各有特点，老城配套好、绿岛品质高、青杠最便宜……小平用11年经验帮你梳理清楚。",
+      "tags": ["板块对比", "买房攻略", "区域分析"],
+      "readTime": "8分钟",
+      "thumbnail": "images/guides/bishan-map.png"
+    },
+    {
+      "id": "g002",
+      "title": "第一次看房要注意什么？验房清单",
+      "category": "验房技巧",
+      "author": "小平",
+      "date": "2026-04-20",
+      "summary": "看房不是看样板间好看就行。采光怎么测？漏水怎么看？邻居怎么打听？小平给你一份实用清单。",
+      "tags": ["验房", "看房技巧", "第一次买房"],
+      "readTime": "6分钟",
+      "thumbnail": "images/guides/check-house.png"
+    },
+    {
+      "id": "g003",
+      "title": "璧山2026上半年房价走势：稳中有降？",
+      "category": "市场趋势",
+      "author": "小平",
+      "date": "2026-06-10",
+      "summary": "整理了璧山六大板块最近18个月的均价走势，绿岛降了快1000，璧城反倒稳住了。数据说话。",
+      "tags": ["房价", "走势分析", "2026"],
+      "readTime": "10分钟",
+      "thumbnail": "images/guides/price-trend.png"
+    },
+    {
+      "id": "g004",
+      "title": "璧山学区房到底怎么选？",
+      "category": "选房攻略",
+      "author": "小平",
+      "date": "2026-03-05",
+      "summary": "璧山实验小学、璧山中学、绿岛实验小学……学区划片每年都在变，小平帮你理清楚。",
+      "tags": ["学区房", "教育", "划片"],
+      "readTime": "7分钟",
+      "thumbnail": "images/guides/school-district.png"
+    },
+    {
+      "id": "g005",
+      "title": "贷款买房：首付、利率、月供怎么算？",
+      "category": "贷款税费",
+      "author": "小平",
+      "date": "2026-02-18",
+      "summary": "首套二套首付比例、公积金vs商贷利率对比、月供怎么算不压力大。小白也能看懂。",
+      "tags": ["贷款", "首付", "公积金", "月供"],
+      "readTime": "9分钟",
+      "thumbnail": "images/guides/loan-guide.png"
+    },
+    {
+      "id": "g006",
+      "title": "绿岛新区深度分析：璧山最贵的地方值不值？",
+      "category": "板块分析",
+      "author": "小平",
+      "date": "2026-05-28",
+      "summary": "绿岛新房均价8000+，比璧城贵了快3000。多出来的钱花在哪了？配套跟上了吗？小平客观分析。",
+      "tags": ["绿岛新区", "深度分析", "改善置业"],
+      "readTime": "12分钟",
+      "thumbnail": "images/guides/lvdao-deep.png"
+    },
+    {
+      "id": "g007",
+      "title": "怎么看翻新房的质量？串串房避坑指南",
+      "category": "验房技巧",
+      "author": "小平",
+      "date": "2026-04-08",
+      "summary": "翻新房不都是串串房。小平教你怎么分辨好翻新和劣质翻新，看水电、看厨卫、看细节。",
+      "tags": ["翻新房", "避坑", "验房"],
+      "readTime": "7分钟",
+      "thumbnail": "images/guides/renovation.png"
+    },
+    {
+      "id": "g008",
+      "title": "刚需首套房：璧山50-70万买哪里？",
+      "category": "选房攻略",
+      "author": "小平",
+      "date": "2026-06-01",
+      "summary": "璧山首套购房者的预算集中在50-70万。这个预算璧泉有两房、青杠有三房、璧城也有选择。小平帮你算账。",
+      "tags": ["刚需", "首套房", "预算"],
+      "readTime": "8分钟",
+      "thumbnail": "images/guides/first-home.png"
+    }
+  ]
+}
